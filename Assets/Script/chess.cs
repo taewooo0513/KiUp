@@ -54,6 +54,12 @@ public class chess : MonoBehaviour
         Instantiate(WKnight, new Vector3(6, 0.5f, 0), Quaternion.identity).transform.SetParent(ChessBoard[6, 0].transform);
         Instantiate(WRook, new Vector3(7, 0.5f, 0), Quaternion.identity).transform.SetParent(ChessBoard[7, 0].transform);
 
+        for(int i = 0; i < 8; i ++)
+        {
+            Instantiate(WPawn, new Vector3(i, 0.5f, 1), Quaternion.identity).transform.SetParent(ChessBoard[i, 1].transform);
+            Instantiate(BPawn, new Vector3(i, 0.5f, 6), Quaternion.identity).transform.SetParent(ChessBoard[i, 6].transform);
+        }
+
 
         Instantiate(BRook, new Vector3(0, 0.5f, 7), Quaternion.identity).transform.SetParent(ChessBoard[0, 7].transform);
         Instantiate(BKnight, new Vector3(1, 0.5f, 7), Quaternion.identity).transform.SetParent(ChessBoard[1, 7].transform);
