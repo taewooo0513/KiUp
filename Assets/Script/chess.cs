@@ -14,7 +14,7 @@ public class chess : MonoBehaviour
     public GameObject WRook;
     public GameObject WBishop;
 
-    
+
     //검은색 말
     public GameObject BKing;
     public GameObject BPawn;
@@ -26,7 +26,85 @@ public class chess : MonoBehaviour
     private GameObject[,] ChessBoard = new GameObject[8, 8];
     private GameObject Move;
     // Start is called before the first frame update
-    void Start()
+    void KingMove(GameObject Obj, GameObject _Obj)
+    {
+        if (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name))<= 1||((Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) >= 9)&& (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) <= 11)))
+        {
+            Obj.transform.SetParent(_Obj.transform);
+            Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+        }
+    }
+    void PawnMove(GameObject Obj, GameObject _Obj)
+    {
+        if ((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) % 10 == 0)
+        {
+            Debug.Log(Obj.layer);
+            if (Obj.layer == LayerMask.NameToLayer("White"))
+            {
+                if (int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name) < 19 && int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name) > 0)
+                {
+                    Obj.transform.SetParent(_Obj.transform);
+                    Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+                }
+            }
+            if (Obj.layer == LayerMask.NameToLayer("Black"))
+            {
+                if (int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name) > -19 && int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name) < 0)
+                {
+                    Obj.transform.SetParent(_Obj.transform);
+                    Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+                }
+            }
+        }
+    }
+    void QueenMove(GameObject Obj, GameObject _Obj)
+    {
+        Obj.transform.SetParent(_Obj.transform);
+        Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+    }
+    void BishopMove(GameObject Obj, GameObject _Obj)
+    {
+        
+        Obj.transform.SetParent(_Obj.transform);
+        Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+    }
+    void KnightMove(GameObject Obj, GameObject _Obj)
+    {
+        switch (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)))
+        {
+            case 8:
+                Obj.transform.SetParent(_Obj.transform);
+                Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+                break;
+            case 12:
+                Obj.transform.SetParent(_Obj.transform);
+                Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+                break;
+            case 19:
+                Obj.transform.SetParent(_Obj.transform);
+                Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+                break;
+            case 21:
+                Obj.transform.SetParent(_Obj.transform);
+                Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+                break;
+        }
+    }
+    void RookMove(GameObject Obj, GameObject _Obj)
+    {
+        Debug.Log((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) / 10);
+        if ((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) % 10 == 0)
+        {
+            Obj.transform.SetParent(_Obj.transform);
+            Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+        }
+        else if ((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) / 10 == 0)
+        {
+            Obj.transform.SetParent(_Obj.transform);
+            Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+        }
+    }
+    void AddChessBoard()
     {
         //체스판 생성
         for (int i = 0; i < 8; i++)
@@ -44,6 +122,9 @@ public class chess : MonoBehaviour
                 ChessBoard[j, i].name = i.ToString() + j.ToString();
             }
         }
+    }
+    void AddChessPiece()
+    {
         //하얀적 생성
         Instantiate(WRook, new Vector3(0, 0.5f, 0), Quaternion.identity).transform.SetParent(ChessBoard[0, 0].transform);
         Instantiate(WKnight, new Vector3(1, 0.5f, 0), Quaternion.identity).transform.SetParent(ChessBoard[1, 0].transform);
@@ -53,14 +134,13 @@ public class chess : MonoBehaviour
         Instantiate(WBishop, new Vector3(5, 0.5f, 0), Quaternion.identity).transform.SetParent(ChessBoard[5, 0].transform);
         Instantiate(WKnight, new Vector3(6, 0.5f, 0), Quaternion.identity).transform.SetParent(ChessBoard[6, 0].transform);
         Instantiate(WRook, new Vector3(7, 0.5f, 0), Quaternion.identity).transform.SetParent(ChessBoard[7, 0].transform);
-
-        for(int i = 0; i < 8; i ++)
+        //폰 생성
+        for (int i = 0; i < 8; i++)
         {
             Instantiate(WPawn, new Vector3(i, 0.5f, 1), Quaternion.identity).transform.SetParent(ChessBoard[i, 1].transform);
             Instantiate(BPawn, new Vector3(i, 0.5f, 6), Quaternion.identity).transform.SetParent(ChessBoard[i, 6].transform);
         }
-
-
+        //검은적생성
         Instantiate(BRook, new Vector3(0, 0.5f, 7), Quaternion.identity).transform.SetParent(ChessBoard[0, 7].transform);
         Instantiate(BKnight, new Vector3(1, 0.5f, 7), Quaternion.identity).transform.SetParent(ChessBoard[1, 7].transform);
         Instantiate(BBishop, new Vector3(2, 0.5f, 7), Quaternion.identity).transform.SetParent(ChessBoard[2, 7].transform);
@@ -69,10 +149,67 @@ public class chess : MonoBehaviour
         Instantiate(BBishop, new Vector3(5, 0.5f, 7), Quaternion.identity).transform.SetParent(ChessBoard[5, 7].transform);
         Instantiate(BKnight, new Vector3(6, 0.5f, 7), Quaternion.identity).transform.SetParent(ChessBoard[6, 7].transform);
         Instantiate(BRook, new Vector3(7, 0.5f, 7), Quaternion.identity).transform.SetParent(ChessBoard[7, 7].transform);
+    }
+    void Start()
+    {
+        AddChessBoard();
+        AddChessPiece();
 
 
     }
     // Update is called once per frame
+    void MoveChess(RaycastHit hit)
+    {
+        if (Move != false)
+        {
+            if (hit.transform.childCount == 0)
+            {
+                switch (Move.tag)
+                {
+                    case "Pawn":
+                        PawnMove(Move, hit.transform.gameObject);
+                        break;
+                    case "King":
+                        KingMove(Move, hit.transform.gameObject);
+                        break;
+                    case "Queen":
+                        QueenMove(Move, hit.transform.gameObject);
+                        break;
+                    case "Knight":
+                        KnightMove(Move, hit.transform.gameObject);
+                        break;
+                    case "Rook":
+                        RookMove(Move, hit.transform.gameObject);
+                        break;
+                    case "Bishop":
+                        BishopMove(Move, hit.transform.gameObject);
+                        break;
+                }
+
+
+
+
+            }
+            else
+            {
+                if (hit.transform.GetChild(0).gameObject.layer != Move.layer)
+                {
+                    Move.transform.SetParent(hit.transform);
+                    Destroy(hit.transform.GetChild(0).gameObject);
+                    Move.transform.position = new Vector3(hit.transform.position.x, 0.5f, hit.transform.position.z);
+
+                }
+            }
+            Move = null;
+        }
+        else
+        {
+            if (hit.transform.childCount != 0)
+            {
+                Move = hit.transform.GetChild(0).gameObject;
+            }
+        }
+    }
     void Update()
     {
         //마우스피킹
@@ -84,35 +221,7 @@ public class chess : MonoBehaviour
             {
                 if (hit.transform.gameObject.CompareTag("Tile"))
                 {
-
-
-                    if (Move != false)
-                    {
-                        if (hit.transform.childCount == 0)
-                        {
-                            Move.transform.SetParent(hit.transform);
-                            Move.transform.position = new Vector3(hit.transform.position.x, 0.5f, hit.transform.position.z);
-
-                        }
-                        else
-                        {
-                            if (hit.transform.GetChild(0).tag != Move.tag)
-                            {
-                                Move.transform.SetParent(hit.transform);
-                                Destroy(hit.transform.GetChild(0).gameObject);
-                                Move.transform.position = new Vector3(hit.transform.position.x, 0.5f, hit.transform.position.z);
-
-                            }
-                        }
-                        Move = null;
-                    }
-                    else
-                    {
-                        if (hit.transform.childCount != 0)
-                        {
-                            Move = hit.transform.GetChild(0).gameObject;
-                        }
-                    }
+                    MoveChess(hit);
                 }
             }
         }
