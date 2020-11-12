@@ -34,6 +34,19 @@ public class chess : MonoBehaviour
             Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
         }
     }
+    void KingATK(GameObject Obj, GameObject _Obj)
+    {
+        if (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) <= 1 || ((Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) >= 9) && (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) <= 11)))
+        {
+            Move.transform.SetParent(_Obj.transform);
+            Destroy(_Obj.transform.GetChild(0).gameObject);
+            Move.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+        }
+    }
+    void PawnATK(GameObject Obj, GameObject _Obj)
+    {
+
+    }
     void PawnMove(GameObject Obj, GameObject _Obj)
     {
         if ((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) % 10 == 0)
@@ -43,20 +56,23 @@ public class chess : MonoBehaviour
             {
                 if (int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name) < 19 && int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name) > 0)
                 {
-                    Obj.transform.SetParent(_Obj.transform);
-                    Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+                    Move.transform.SetParent(_Obj.transform);
+                    Destroy(_Obj.transform.GetChild(0).gameObject);
+                    Move.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
                 }
             }
             if (Obj.layer == LayerMask.NameToLayer("Black"))
             {
                 if (int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name) > -19 && int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name) < 0)
                 {
-                    Obj.transform.SetParent(_Obj.transform);
-                    Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+                    Move.transform.SetParent(_Obj.transform);
+                    Destroy(_Obj.transform.GetChild(0).gameObject);
+                    Move.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
                 }
             }
         }
     }
+    
     void QueenMove(GameObject Obj, GameObject _Obj)
     {
         Obj.transform.SetParent(_Obj.transform);
@@ -67,6 +83,32 @@ public class chess : MonoBehaviour
         
         Obj.transform.SetParent(_Obj.transform);
         Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+    }
+    void KnightATK(GameObject Obj, GameObject _Obj)
+    {
+        switch (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)))
+        {
+            case 8:
+                Move.transform.SetParent(_Obj.transform);
+                Destroy(_Obj.transform.GetChild(0).gameObject);
+                Move.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+                break;
+            case 12:
+                Move.transform.SetParent(_Obj.transform);
+                Destroy(_Obj.transform.GetChild(0).gameObject);
+                Move.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+                break;
+            case 19:
+                Move.transform.SetParent(_Obj.transform);
+                Destroy(_Obj.transform.GetChild(0).gameObject);
+                Move.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+                break;
+            case 21:
+                Move.transform.SetParent(_Obj.transform);
+                Destroy(_Obj.transform.GetChild(0).gameObject);
+                Move.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+                break;
+        }
     }
     void KnightMove(GameObject Obj, GameObject _Obj)
     {
@@ -90,15 +132,31 @@ public class chess : MonoBehaviour
                 break;
         }
     }
+    void RookATK(GameObject Obj, GameObject _Obj)
+    {
+        Debug.Log((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) / 10);
+        if (((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) % 10 == 0) && (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) != 9))
+        {
+            Move.transform.SetParent(_Obj.transform);
+            Destroy(_Obj.transform.GetChild(0).gameObject);
+            Move.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+        }
+        else if (((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) / 10 == 0) && (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) != 9))
+        {
+            Move.transform.SetParent(_Obj.transform);
+            Destroy(_Obj.transform.GetChild(0).gameObject);
+            Move.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+        }
+    }
     void RookMove(GameObject Obj, GameObject _Obj)
     {
         Debug.Log((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) / 10);
-        if ((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) % 10 == 0)
+        if (((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) % 10 == 0)&& (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name))!=9) )
         {
             Obj.transform.SetParent(_Obj.transform);
             Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
         }
-        else if ((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) / 10 == 0)
+        else if (((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) / 10 == 0) && (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) != 9))
         {
             Obj.transform.SetParent(_Obj.transform);
             Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
@@ -185,18 +243,12 @@ public class chess : MonoBehaviour
                         BishopMove(Move, hit.transform.gameObject);
                         break;
                 }
-
-
-
-
             }
             else
             {
                 if (hit.transform.GetChild(0).gameObject.layer != Move.layer)
                 {
-                    Move.transform.SetParent(hit.transform);
-                    Destroy(hit.transform.GetChild(0).gameObject);
-                    Move.transform.position = new Vector3(hit.transform.position.x, 0.5f, hit.transform.position.z);
+                   
 
                 }
             }
