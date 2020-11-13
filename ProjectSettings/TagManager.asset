@@ -8,6 +8,11 @@ TagManager:
   - Tile
   - White
   - Black
+  - Knight
+  - Pawn
+  - Rook
+  - Queen
+  - Bishop
   layers:
   - Default
   - TransparentFX
@@ -18,8 +23,8 @@ TagManager:
   - 
   - 
   - ChessPlane
-  - 
-  - 
+  - White
+  - Black
   - 
   - 
   - 

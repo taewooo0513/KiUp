@@ -28,7 +28,7 @@ public class chess : MonoBehaviour
     // Start is called before the first frame update
     void KingMove(GameObject Obj, GameObject _Obj)
     {
-        if (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name))<= 1||((Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) >= 9)&& (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) <= 11)))
+        if (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) <= 1 || ((Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) >= 9) && (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) <= 11)))
         {
             Obj.transform.SetParent(_Obj.transform);
             Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
@@ -45,7 +45,7 @@ public class chess : MonoBehaviour
     }
     void PawnATK(GameObject Obj, GameObject _Obj)
     {
-
+        Debug.Log("gd");
     }
     void PawnMove(GameObject Obj, GameObject _Obj)
     {
@@ -56,33 +56,90 @@ public class chess : MonoBehaviour
             {
                 if (int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name) < 19 && int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name) > 0)
                 {
-                    Move.transform.SetParent(_Obj.transform);
-                    Destroy(_Obj.transform.GetChild(0).gameObject);
-                    Move.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+                    Obj.transform.SetParent(_Obj.transform);
+                    Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
                 }
             }
             if (Obj.layer == LayerMask.NameToLayer("Black"))
             {
                 if (int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name) > -19 && int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name) < 0)
                 {
-                    Move.transform.SetParent(_Obj.transform);
-                    Destroy(_Obj.transform.GetChild(0).gameObject);
-                    Move.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+                    Obj.transform.SetParent(_Obj.transform);
+                    Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
                 }
             }
         }
     }
-    
+
     void QueenMove(GameObject Obj, GameObject _Obj)
     {
-        Obj.transform.SetParent(_Obj.transform);
-        Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+        for (int i = 1; i < 5; i++)
+        {
+            if (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) == i * 11 || Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) == i * 9)
+            {
+                Obj.transform.SetParent(_Obj.transform);
+                Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+            }
+        }
+        if (((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) % 10 == 0) && (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) != 9))
+        {
+            Obj.transform.SetParent(_Obj.transform);
+            Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+        }
+        else if (((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) / 10 == 0) && (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) != 9))
+        {
+            Obj.transform.SetParent(_Obj.transform);
+            Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+        }
+    }
+    void QueenATK(GameObject Obj, GameObject _Obj)
+    {
+        for (int i = 1; i < 5; i++)
+        {
+            if (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) == i * 11 || Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) == i * 9)
+            {
+                Move.transform.SetParent(_Obj.transform);
+                Move.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+                Destroy(_Obj.transform.GetChild(0).gameObject);
+            }
+        }
+        if (((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) % 10 == 0) && (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) != 9))
+        {
+            Move.transform.SetParent(_Obj.transform);
+            Move.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+            Destroy(_Obj.transform.GetChild(0).gameObject);
+        }
+        else if (((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) / 10 == 0) && (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) != 9))
+        {
+            Move.transform.SetParent(_Obj.transform);
+            Move.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+            Destroy(_Obj.transform.GetChild(0).gameObject);
+        }
     }
     void BishopMove(GameObject Obj, GameObject _Obj)
     {
+        for (int i = 1; i <8; i++)
+        {
+            if (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) == i * 11|| Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) == i * 9)
+            {
+                Obj.transform.SetParent(_Obj.transform);
+                Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+            }
+        }
+
+    }
+    void BishopATK(GameObject Obj, GameObject _Obj)
+    {
+        for (int i = 1; i < 5; i++)
+        {
+            if (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) == i * 11 || Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) == i * 9)
+            {
+                Move.transform.SetParent(_Obj.transform);
+                Destroy(_Obj.transform.GetChild(0).gameObject);
+                Move.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
+            }
+        }
         
-        Obj.transform.SetParent(_Obj.transform);
-        Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
     }
     void KnightATK(GameObject Obj, GameObject _Obj)
     {
@@ -151,7 +208,7 @@ public class chess : MonoBehaviour
     void RookMove(GameObject Obj, GameObject _Obj)
     {
         Debug.Log((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) / 10);
-        if (((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) % 10 == 0)&& (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name))!=9) )
+        if (((int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) % 10 == 0) && (Mathf.Abs(int.Parse(_Obj.name) - int.Parse(Obj.transform.parent.name)) != 9))
         {
             Obj.transform.SetParent(_Obj.transform);
             Obj.transform.position = new Vector3(_Obj.transform.position.x, 0.5f, _Obj.transform.position.z);
@@ -248,7 +305,27 @@ public class chess : MonoBehaviour
             {
                 if (hit.transform.GetChild(0).gameObject.layer != Move.layer)
                 {
-                   
+                    switch (Move.tag)
+                    {
+                        case "Pawn":
+                            PawnATK(Move, hit.transform.gameObject);
+                            break;
+                        case "King":
+                            KingATK(Move, hit.transform.gameObject);
+                            break;
+                        case "Queen":
+                            QueenATK(Move, hit.transform.gameObject);
+                            break;
+                        case "Knight":
+                            KnightATK(Move, hit.transform.gameObject);
+                            break;
+                        case "Rook":
+                            RookATK(Move, hit.transform.gameObject);
+                            break;
+                        case "Bishop":
+                            BishopATK(Move, hit.transform.gameObject);
+                            break;
+                    }
 
                 }
             }
