@@ -50,7 +50,7 @@ public class LoginUI : MonoBehaviour
        // mainTitle.SetActive(true);
     //    touchStart.SetActive(true);
        // subTitle.SetActive(false);
-        loginObject.SetActive(false);
+        loginObject.SetActive(true);
         customLoginObject.SetActive(false);
         signUpObject.SetActive(false);
         errorObject.SetActive(false);
@@ -85,6 +85,7 @@ public class LoginUI : MonoBehaviour
                 if (result)
                 {
                  //   ChangeLobbyScene();
+
                     return;
                 }
                 //loadingObject.SetActive(false);
@@ -120,7 +121,6 @@ public class LoginUI : MonoBehaviour
             return;
         }
 
-       // loadingObject.SetActive(true);
         serverManager.GetInstance().CustomLogin(id, pw, (bool result, string error) =>
         {
             Dispatcher.Current.BeginInvoke(() =>
@@ -132,7 +132,8 @@ public class LoginUI : MonoBehaviour
                     errorObject.SetActive(true);
                     return;
                 }
-                SceneManager.LoadScene("Sample Scene");
+                SceneManager.LoadScene("MainScene");
+
             });
         });
     }
@@ -165,7 +166,7 @@ public class LoginUI : MonoBehaviour
                     errorObject.SetActive(true);
                     return;
                 }
-                SceneManager.LoadScene("Sample Scene");
+                SceneManager.LoadScene("MainScene");
             });
         });
     }
@@ -190,6 +191,7 @@ public class LoginUI : MonoBehaviour
     {
         if (errorObject.activeSelf)
         {
+            //
             return;
         }
         string nickname = nicknameField.text;
@@ -239,9 +241,9 @@ public class LoginUI : MonoBehaviour
                     errorObject.SetActive(true);
                     return;
                 }
-                SceneManager.LoadScene("Sample Scene");
             });
         });
+           
     }
 
     //void ChangeLobbyScene()

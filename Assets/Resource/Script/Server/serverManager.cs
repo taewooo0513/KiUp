@@ -5,12 +5,14 @@ using BackEnd;
 using static BackEnd.SendQueue;
 using UnityEngine.SocialPlatforms;
 using System;
-
+using BackEnd.Tcp;
+using UnityEngine.SceneManagement;
 public class serverManager : MonoBehaviour
 {
+
     private static serverManager instance;   // 인스턴스
     public bool isLogin { get; private set; }   // 로그인 여부
-
+    BackEnd.Tcp.MatchMakingInteractionEventArgs args;
     private string tempNickName;                        // 설정할 닉네임 (id와 동일)
     public string myNickName { get; private set; } = string.Empty;  // 로그인한 계정의 닉네임
     public string myIndate { get; private set; } = string.Empty;    // 로그인한 계정의 inDate
@@ -19,6 +21,20 @@ public class serverManager : MonoBehaviour
     private const string BackendError = "statusCode : {0}\nErrorCode : {1}\nMessage : {2}";
     // Start is called before the first frame update
 
+    public class RoomSetting
+    {
+        public bool Enable_SandBox = false;
+        public string headCount;
+        public MatchType type;
+    }
+    public void GetMatchCard()
+    {
+        Backend.Match.GetMatchList(callback =>
+        {
+
+        });
+
+    }
     void Awake()
     {
         if (instance != null)
@@ -81,7 +97,6 @@ public class serverManager : MonoBehaviour
             {
                 Debug.Log("토큰 로그인 성공");
                 loginSuccessFunc = func;
-
                 OnPrevBackendAuthorized();
                 return;
             }
@@ -111,8 +126,8 @@ public class serverManager : MonoBehaviour
             {
                 Debug.Log("커스텀 로그인 성공");
                 loginSuccessFunc = func;
-
                 OnPrevBackendAuthorized();
+
                 return;
             }
 
@@ -194,7 +209,9 @@ public class serverManager : MonoBehaviour
     void Update()
     {
         SendQueue.Poll();
+        Backend.Match.Poll();
     }
+ 
     public void GuestLogin(Action<bool, string> func)
     {
         Enqueue(Backend.BMember.GuestLogin, callback =>
@@ -203,9 +220,11 @@ public class serverManager : MonoBehaviour
             {
                 Debug.Log("게스트 로그인 성공");
                 loginSuccessFunc = func;
-
                 OnPrevBackendAuthorized();
+                SceneManager.LoadScene("MainScene");
+
                 return;
+
             }
 
             Debug.Log("게스트 로그인 실패\n" + callback);
@@ -328,5 +347,6 @@ public class serverManager : MonoBehaviour
 //            func(true, string.Empty);
 //        });
 //    }
+
 }
 
