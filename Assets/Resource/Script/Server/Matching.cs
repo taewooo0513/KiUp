@@ -21,6 +21,10 @@ public partial class MatchManager : MonoBehaviour
             Debug.Log(errorLog);
         }
     }
+    public void MakeRoom()
+    {
+        MatchManager.GetInstance().CreateMatchRoom();
+    }
     public void LeaveMatchServer()
     {
         isConnectMatchServer = false;
@@ -38,9 +42,8 @@ public partial class MatchManager : MonoBehaviour
         if(!isConnectMatchServer)
         {
             Debug.Log("매칭중");
-            Debug.Log("매칭중");
             JoinMatchServer();
-            return false;
+            return false ;
         }
         Debug.Log("방 생성 요청을 서버로 보냄");
         Backend.Match.CreateMatchRoom();

@@ -91,7 +91,33 @@ public partial class MatchManager : MonoBehaviour
     {
         Backend.Match.OnJoinMatchMakingServer += (args) =>
         {
+            Debug.Log("로그인"+args.ErrInfo);
+        };
+        Backend.Match.OnMatchMakingResponse += (args) =>
+        {
 
+            Debug.Log("OnMatchMakingResponse : " + args.ErrInfo + " : " + args.Reason);
+            // 매칭 신청 관련 작업에 대한 호출
+            ProcessMatchMakingResponse(args);
+        };
+
+        Backend.Match.OnLeaveMatchMakingServer += (args) =>
+        {
+            // 매칭 서버에서 접속 종료할 때 호출
+            Debug.Log("OnLeaveMatchMakingServer : " + args.ErrInfo);
+            isConnectMatchServer = false;
+
+            if (args.ErrInfo.Category.Equals(ErrorCode.DisconnectFromRemote) || args.ErrInfo.Category.Equals(ErrorCode.Exception)
+                || args.ErrInfo.Category.Equals(ErrorCode.NetworkTimeout))
+            {
+                // 서버에서 강제로 끊은 경우
+                if (LobbyUI.GetInstance())
+                {
+                    //LobbyUI.GetInstance().MatchRequestCallback(false);
+                    //LobbyUI.GetInstance().CloseRoomUIOnly();
+                    //LobbyUI.GetInstance().SetErrorObject("매칭서버와 연결이 끊어졌습니다.\n\n" + args.ErrInfo.Reason);
+                }
+            }
         };
     }
     private void AccessInGameRoom(string roomToken)

@@ -193,12 +193,12 @@ public class serverManager : MonoBehaviour
             }
             myNickName = info["nickname"].ToString();
             myIndate = info["inDate"].ToString();
-
             if (loginSuccessFunc != null)
             {
              //   BackEndMatchManager.GetInstance().GetMatchList(loginSuccessFunc);
                 // loginSuccessFunc(true, string.Empty);
             }
+            SceneManager.LoadScene("Matching");
         });
     }
     void Update()
@@ -216,12 +216,11 @@ public class serverManager : MonoBehaviour
                 Debug.Log("게스트 로그인 성공");
                 loginSuccessFunc = func;
                 OnPrevBackendAuthorized();
-                SceneManager.LoadScene("MainScene");
 
                 return;
 
             }
-
+            Backend.BMember.DeleteGuestInfo();
             Debug.Log("게스트 로그인 실패\n" + callback);
             func(false, string.Format(BackendError,
                 callback.GetStatusCode(), callback.GetErrorCode(), callback.GetMessage()));

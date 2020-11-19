@@ -61,27 +61,28 @@ public class LoginUI : MonoBehaviour
         nicknameField = nicknameObject.GetComponentInChildren<InputField>();
         errorText = errorObject.GetComponentInChildren<Text>();
 
-       loadingObject = GameObject.FindGameObjectWithTag("Loading");
-        loadingObject.SetActive(false);
+        
 
-      //  var fade = GameObject.FindGameObjectWithTag("Fade");
-     //   if (fade != null)
+
+        //  var fade = GameObject.FindGameObjectWithTag("Fade");
+        //   if (fade != null)
         //{
-           // fadeObject = fade.GetComponent<FadeAnimation>();
-       // }
+        // fadeObject = fade.GetComponent<FadeAnimation>();
+        // }
 
-      //  mainTitle.GetComponentInChildren<Text>().text = string.Format(VERSION_STR, Application.version);
+        //  mainTitle.GetComponentInChildren<Text>().text = string.Format(VERSION_STR, Application.version);
 
-   
+
     }
 
     public void TouchStart()
     {
-        loadingObject.SetActive(true);
+     
         serverManager.GetInstance().BackendTokenLogin((bool result, string error) =>
         {
             Dispatcher.Current.BeginInvoke(() =>
             {
+                Debug.Log("gdasn");
                 if (result)
                 {
                  //   ChangeLobbyScene();
@@ -125,6 +126,7 @@ public class LoginUI : MonoBehaviour
         {
             Dispatcher.Current.BeginInvoke(() =>
             {
+                Debug.Log("gdasn");
                 if (!result)
                 {
                     //loadingObject.SetActive(false);
@@ -132,7 +134,6 @@ public class LoginUI : MonoBehaviour
                     errorObject.SetActive(true);
                     return;
                 }
-                SceneManager.LoadScene("MainScene");
 
             });
         });
@@ -159,6 +160,7 @@ public class LoginUI : MonoBehaviour
         {
             Dispatcher.Current.BeginInvoke(() =>
             {
+             
                 if (!result)
                 {
                     loadingObject.SetActive(false);
@@ -166,32 +168,32 @@ public class LoginUI : MonoBehaviour
                     errorObject.SetActive(true);
                     return;
                 }
-                SceneManager.LoadScene("MainScene");
+                
+               
             });
         });
     }
 
     public void ActiveNickNameObject()
     {
+        
         Dispatcher.Current.BeginInvoke(() =>
         {
-            mainTitle.SetActive(false);
-            touchStart.SetActive(false);
-            subTitle.SetActive(true);
             loginObject.SetActive(false);
             customLoginObject.SetActive(false);
             signUpObject.SetActive(false);
             errorObject.SetActive(false);
-            loadingObject.SetActive(false);
             nicknameObject.SetActive(true);
         });
     }
-
+    public void NextScene()
+    {
+        SceneManager.LoadScene("Matching");
+    }
     public void UpdateNickName()
     {
         if (errorObject.activeSelf)
         {
-            //
             return;
         }
         string nickname = nicknameField.text;
@@ -229,9 +231,10 @@ public class LoginUI : MonoBehaviour
             return;
         }
 
-     //   loadingObject.SetActive(true);
+        //   loadingObject.SetActive(true);
         serverManager.GetInstance().GuestLogin((bool result, string error) =>
         {
+
             Dispatcher.Current.BeginInvoke(() =>
             {
                 if (!result)
@@ -241,9 +244,10 @@ public class LoginUI : MonoBehaviour
                     errorObject.SetActive(true);
                     return;
                 }
+
             });
         });
-           
+
     }
 
     //void ChangeLobbyScene()

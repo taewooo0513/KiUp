@@ -21,6 +21,18 @@ public class LobbyUI : MonoBehaviour
     }
     private static LobbyUI instance;
     // Start is called before the first frame update
+    public void JoinServer()
+    {
+        MatchManager.GetInstance().JoinMatchServer();
+    }
+    public void LeaveServer()
+    {
+        MatchManager.GetInstance().LeaveMatchServer();
+    }
+    public void MakeRoom()
+    {
+        MatchManager.GetInstance().CreateMatchRoom();
+    }
     private void Awake()
     {
 
@@ -31,18 +43,22 @@ public class LobbyUI : MonoBehaviour
         instance = this;
 
         MatchManager.GetInstance().IsMatchGameActivate();
+
     }
     void Start()
     {
-        if(MatchManager.GetInstance() != null)
+         Debug.Log("닉네임 : " + serverManager.GetInstance().myNickName);
+
+        if (MatchManager.GetInstance() != null)
         {
             SetNickName();
         }
     }
     private void SetNickName()
     {
+        Debug.Log("닉네임 : " + serverManager.GetInstance().myNickName);
         var name = serverManager.GetInstance().myNickName;
-        if(name.Equals(string.Empty))
+        if (name.Equals(string.Empty))
         {
             Debug.LogError("닉네임 불러오기 실패");
             name = "test123";

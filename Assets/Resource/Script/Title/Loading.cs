@@ -17,7 +17,7 @@ public class Loading : MonoBehaviour
     IEnumerator LoadScene()
     {
         yield return null;
-        AsyncOperation op = SceneManager.LoadSceneAsync("GameScene");
+        AsyncOperation op = SceneManager.LoadSceneAsync("Matching");
 
         while (!op.isDone)
         {
@@ -34,7 +34,7 @@ public class Loading : MonoBehaviour
 
             if(LoadingBar.value > 1f && op.progress > 0.9f)
             {
-                op.allowSceneActivation = true;
+               // op.allowSceneActivation = true;
             }
         }
     }
