@@ -275,12 +275,14 @@ public class chess : MonoBehaviour
     // Update is called once per frame
     void MoveChess(RaycastHit hit)
     {
+        
+        //마우스로 타일을 누루면 그 위에있는 말이 Move가됨 그래서 그 Move말을 hit 위치의 자식 수를 검사하여 0이면 움직일수 있게함 
         if (Move != false)
         {
             if (hit.transform.childCount == 0)
             {
                 switch (Move.tag)
-                {
+                {//Move 의 태그를 검사하여 그 태그를 가진 말들마다 제한둠
                     case "Pawn":
                         PawnMove(Move, hit.transform.gameObject);
                         break;
@@ -304,7 +306,7 @@ public class chess : MonoBehaviour
             else
             {
                 if (hit.transform.GetChild(0).gameObject.layer != Move.layer)
-                {
+                {//이건 부모오브젝트에 자식수가 1이상이면 실행됨 레이어를 검사하여 흰색 검은색 검사함
                     switch (Move.tag)
                     {
                         case "Pawn":
@@ -328,13 +330,14 @@ public class chess : MonoBehaviour
                     }
 
                 }
-            }
+            }//한번 움직이면 null 로만들어줌 그래서 다음 클릭할때 또이동하지 못하게함
             Move = null;
         }
         else
         {
             if (hit.transform.childCount != 0)
             {
+                //처음엔 Move 의 값이 없으니까 한번 해줘야댐
                 Move = hit.transform.GetChild(0).gameObject;
             }
         }
@@ -348,7 +351,7 @@ public class chess : MonoBehaviour
         {
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.transform.gameObject.CompareTag("Tile"))
+                if (hit.transform.gameObject.CompareTag("Tile"))//마우스 피킹을하여 그 타일의 자식오브젝트를 확인하여 움직일수있음 
                 {
                     MoveChess(hit);
                 }
