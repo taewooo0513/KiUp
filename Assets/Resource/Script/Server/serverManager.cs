@@ -21,12 +21,7 @@ public class serverManager : MonoBehaviour
     private const string BackendError = "statusCode : {0}\nErrorCode : {1}\nMessage : {2}";
     // Start is called before the first frame update
 
-    public class RoomSetting
-    {
-        public bool Enable_SandBox = false;
-        public string headCount;
-        public MatchType type;
-    }
+ 
     public void GetMatchCard()
     {
         Backend.Match.GetMatchList(callback =>

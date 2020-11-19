@@ -152,7 +152,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 84983728}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c54bf0827ea25a429bb0da8dcdd1fed, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f18a260dc336f14db99897522b55e29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &84983730
@@ -417,6 +417,7 @@ GameObject:
   - component: {fileID: 318484697}
   - component: {fileID: 318484696}
   - component: {fileID: 318484695}
+  - component: {fileID: 318484698}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -489,6 +490,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &318484698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 318484694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd4a6ea20259e0249ac792279c7c980e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1076638220
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,8 +585,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 84983729}
-        m_TargetAssemblyTypeName: Matching, Assembly-CSharp
-        m_MethodName: GameMatching
+        m_TargetAssemblyTypeName: MatchManager, Assembly-CSharp
+        m_MethodName: JoinMatchServer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
