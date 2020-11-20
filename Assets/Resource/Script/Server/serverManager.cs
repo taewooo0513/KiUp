@@ -7,6 +7,8 @@ using UnityEngine.SocialPlatforms;
 using System;
 using BackEnd.Tcp;
 using UnityEngine.SceneManagement;
+using Battlehub.Dispatcher;
+
 public class serverManager : MonoBehaviour
 {
 
@@ -21,15 +23,8 @@ public class serverManager : MonoBehaviour
     private const string BackendError = "statusCode : {0}\nErrorCode : {1}\nMessage : {2}";
     // Start is called before the first frame update
 
- 
-    public void GetMatchCard()
-    {
-        Backend.Match.GetMatchList(callback =>
-        {
 
-        });
-
-    }
+  
     void Awake()
     {
         if (instance != null)
@@ -195,8 +190,8 @@ public class serverManager : MonoBehaviour
             myIndate = info["inDate"].ToString();
             if (loginSuccessFunc != null)
             {
-             //   BackEndMatchManager.GetInstance().GetMatchList(loginSuccessFunc);
-                // loginSuccessFunc(true, string.Empty);
+                MatchManager.GetInstance().GetMatchList(loginSuccessFunc);
+                loginSuccessFunc(true, string.Empty);
             }
             SceneManager.LoadScene("Matching");
         });
@@ -206,7 +201,7 @@ public class serverManager : MonoBehaviour
         SendQueue.Poll();
         Backend.Match.Poll();
     }
- 
+
     public void GuestLogin(Action<bool, string> func)
     {
         Enqueue(Backend.BMember.GuestLogin, callback =>
@@ -228,119 +223,119 @@ public class serverManager : MonoBehaviour
     }
 
     //이아래는 친구추가 관련 항목임 알잘딱갈센하샘
-//    public void GetFriendList(Action<bool, List<Friend>> func)
-//    {
-//        Enqueue(Backend.Social.Friend.GetFriendList, 15, callback =>
-//        {
-//            if (callback.IsSuccess() == false)
-//            {
-//                func(false, null);
-//                return;
-//            }
+    //    public void GetFriendList(Action<bool, List<Friend>> func)
+    //    {
+    //        Enqueue(Backend.Social.Friend.GetFriendList, 15, callback =>
+    //        {
+    //            if (callback.IsSuccess() == false)
+    //            {
+    //                func(false, null);
+    //                return;
+    //            }
 
-//            var friendList = new List<Friend>();
+    //            var friendList = new List<Friend>();
 
-//            foreach (LitJson.JsonData tmp in callback.Rows())
-//            {
-//                if (tmp.Keys.Contains("nickname") == false)
-//                {
-//                    continue;
-//                }
-//                Friend friend = new Friend();
-//                friend.nickName = tmp["nickname"]["S"].ToString();
-//                friend.inDate = tmp["inDate"]["S"].ToString();
+    //            foreach (LitJson.JsonData tmp in callback.Rows())
+    //            {
+    //                if (tmp.Keys.Contains("nickname") == false)
+    //                {
+    //                    continue;
+    //                }
+    //                Friend friend = new Friend();
+    //                friend.nickName = tmp["nickname"]["S"].ToString();
+    //                friend.inDate = tmp["inDate"]["S"].ToString();
 
-//                friendList.Add(friend);
-//            }
+    //                friendList.Add(friend);
+    //            }
 
-//            func(true, friendList);
-//        });
-//    }
-//    public void GetReceivedRequestFriendList(Action<bool, List<Friend>> func)
-//    {
-//        Enqueue(Backend.Social.Friend.GetReceivedRequestList, 15, callback =>
-//        {
-//            if (callback.IsSuccess() == false)
-//            {
-//                func(false, null);
-//                return;
-//            }
+    //            func(true, friendList);
+    //        });
+    //    }
+    //    public void GetReceivedRequestFriendList(Action<bool, List<Friend>> func)
+    //    {
+    //        Enqueue(Backend.Social.Friend.GetReceivedRequestList, 15, callback =>
+    //        {
+    //            if (callback.IsSuccess() == false)
+    //            {
+    //                func(false, null);
+    //                return;
+    //            }
 
-//            var friendList = new List<Friend>();
+    //            var friendList = new List<Friend>();
 
-//            foreach (LitJson.JsonData tmp in callback.Rows())
-//            {
-//                if (tmp.Keys.Contains("nickname") == false)
-//                {
-//                    continue;
-//                }
-//                Friend friend = new Friend();
-//                friend.nickName = tmp["nickname"]["S"].ToString();
-//                friend.inDate = tmp["inDate"]["S"].ToString();
+    //            foreach (LitJson.JsonData tmp in callback.Rows())
+    //            {
+    //                if (tmp.Keys.Contains("nickname") == false)
+    //                {
+    //                    continue;
+    //                }
+    //                Friend friend = new Friend();
+    //                friend.nickName = tmp["nickname"]["S"].ToString();
+    //                friend.inDate = tmp["inDate"]["S"].ToString();
 
-//                friendList.Add(friend);
-//            }
+    //                friendList.Add(friend);
+    //            }
 
-//            func(true, friendList);
-//        });
-//    }
-//    public void RequestFirend(string nickName, Action<bool, string> func)
-//    {
-//        Enqueue(Backend.Social.GetGamerIndateByNickname, nickName, callback =>
-//        {
-//            Debug.Log(callback);
-//            if (callback.IsSuccess() == false)
-//            {
-//                func(false, callback.GetMessage());
-//                return;
-//            }
-//            if (callback.Rows().Count <= 0)
-//            {
-//                func(false, "존재하지 않는 유저입니다.");
-//                return;
-//            }
-//            string inDate = callback.Rows()[0]["inDate"]["S"].ToString();
-//            Enqueue(Backend.Social.Friend.RequestFriend, inDate, callback2 =>
-//            {
-//                Debug.Log(callback2);
-//                if (callback2.IsSuccess() == false)
-//                {
-//                    func(false, callback2.GetMessage());
-//                    return;
-//                }
+    //            func(true, friendList);
+    //        });
+    //    }
+    //    public void RequestFirend(string nickName, Action<bool, string> func)
+    //    {
+    //        Enqueue(Backend.Social.GetGamerIndateByNickname, nickName, callback =>
+    //        {
+    //            Debug.Log(callback);
+    //            if (callback.IsSuccess() == false)
+    //            {
+    //                func(false, callback.GetMessage());
+    //                return;
+    //            }
+    //            if (callback.Rows().Count <= 0)
+    //            {
+    //                func(false, "존재하지 않는 유저입니다.");
+    //                return;
+    //            }
+    //            string inDate = callback.Rows()[0]["inDate"]["S"].ToString();
+    //            Enqueue(Backend.Social.Friend.RequestFriend, inDate, callback2 =>
+    //            {
+    //                Debug.Log(callback2);
+    //                if (callback2.IsSuccess() == false)
+    //                {
+    //                    func(false, callback2.GetMessage());
+    //                    return;
+    //                }
 
-//                func(true, string.Empty);
-//            });
-//        });
-//    }
+    //                func(true, string.Empty);
+    //            });
+    //        });
+    //    }
 
-//    public void AcceptFriend(string inDate, Action<bool, string> func)
-//    {
-//        Enqueue(Backend.Social.Friend.AcceptFriend, inDate, callback2 =>
-//        {
-//            if (callback2.IsSuccess() == false)
-//            {
-//                func(false, callback2.GetMessage());
-//                return;
-//            }
+    //    public void AcceptFriend(string inDate, Action<bool, string> func)
+    //    {
+    //        Enqueue(Backend.Social.Friend.AcceptFriend, inDate, callback2 =>
+    //        {
+    //            if (callback2.IsSuccess() == false)
+    //            {
+    //                func(false, callback2.GetMessage());
+    //                return;
+    //            }
 
-//            func(true, string.Empty);
-//        });
-//    }
+    //            func(true, string.Empty);
+    //        });
+    //    }
 
-//    public void RejectFriend(string inDate, Action<bool, string> func)
-//    {
-//        Enqueue(Backend.Social.Friend.RejectFriend, inDate, callback2 =>
-//        {
-//            if (callback2.IsSuccess() == false)
-//            {
-//                func(false, callback2.GetMessage());
-//                return;
-//            }
+    //    public void RejectFriend(string inDate, Action<bool, string> func)
+    //    {
+    //        Enqueue(Backend.Social.Friend.RejectFriend, inDate, callback2 =>
+    //        {
+    //            if (callback2.IsSuccess() == false)
+    //            {
+    //                func(false, callback2.GetMessage());
+    //                return;
+    //            }
 
-//            func(true, string.Empty);
-//        });
-//    }
+    //            func(true, string.Empty);
+    //        });
+    //    }
 
 }
 

@@ -37,6 +37,35 @@ public partial class MatchManager : MonoBehaviour
         Debug.Log(string.Format("매칭 타입/모드 : {0}/{1}", nowmatchType, nowModeType));
 
     }
+    private void ProcessMatchSuccess(MatchMakingResponseEventArgs args)
+    {
+        ErrorInfo errorInfo;
+        if(sessionIdList != null)
+        {
+            Debug.Log("이전 세션 정보 저장");
+            sessionIdList.Clear();
+        }
+        if(!Backend.Match.JoinGameServer(args.RoomInfo.m_inGameServerEndPoint.m_address,args.RoomInfo.m_inGameServerEndPoint.m_port,false,out errorInfo))
+        {
+            var debugLog = string.Format("실패",errorInfo.ToString(),string.Empty);
+            Debug.Log(debugLog);
+        }
+        isConnectInGameServer = true;
+        isJoinGameRoom = false;
+        isReconnectProcess = false;
+        inGameRoomToken = args.RoomInfo.m_inGameRoomToken;
+        isSandBoxGame = args.RoomInfo.m_enableSandbox;
+        var info = GetMatchInfo(args.MatchCardIndate);
+        if (info == null)
+        {
+            Debug.LogError("매치 정보를 불러오는 데 실패했습니다.");
+            return;
+        }
+        nowmatchType = info.matchType;
+        nowModeType = info.matchModeType;
+        numOfClient = int.Parse(info.HeadCount);
+
+    }
     public bool CreateMatchRoom()
     {
         if(!isConnectMatchServer)
@@ -47,7 +76,12 @@ public partial class MatchManager : MonoBehaviour
         }
         Debug.Log("방 생성 요청을 서버로 보냄");
         Backend.Match.CreateMatchRoom();
+        RequestMatch();
         return true;
+    }
+    public void RequestMatch()
+    {
+        RequestMatchMaking(0);
     }
     public void _LeaveMatcRoom()
     {
@@ -55,6 +89,7 @@ public partial class MatchManager : MonoBehaviour
     }
     public void RequestMatchMaking(int index)
     {
+        Debug.Log("tprtm");
         if(!isConnectMatchServer)
         {
             Debug.Log("서버연결 실패");
@@ -63,6 +98,7 @@ public partial class MatchManager : MonoBehaviour
             return;
         }
         isConnectInGameServer = false;
+        Debug.Log("gdsakngsdlkgnsald");
         Backend.Match.RequestMatchMaking(MatchInfos[index].matchType,MatchInfos[index].matchModeType,MatchInfos[index].indate);
         if(isConnectInGameServer)
         {
@@ -95,7 +131,7 @@ public partial class MatchManager : MonoBehaviour
         {
             case ErrorCode.Success ://매칭성공시
                 debugLog = string.Format("성공", args.Reason);
-
+                ProcessMatchSuccess(args);
                 break;
             case ErrorCode.Match_InProgress://매치 중일때 재신청하면
                 if(args.Reason == string.Empty)

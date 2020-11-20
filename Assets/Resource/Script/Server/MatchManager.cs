@@ -22,6 +22,7 @@ public partial class MatchManager : MonoBehaviour
         public string indate;
         public MatchType matchType;
         public MatchModeType matchModeType;
+        public string HeadCount;
     }
     private ServerInfo roomInfo = null;             // 게임 룸 정보
 
@@ -29,6 +30,7 @@ public partial class MatchManager : MonoBehaviour
     public List<MatchInfo> MatchInfos { get; private set; } = new List<MatchInfo>();
     public bool isConnectMatchServer { get; private set; } = false;
     public bool isReconnectProcess { get; private set; } = false;
+    private int numOfClient = 2;                    // 매치에 참가한 유저의 총 수
     private bool isHost = false;
     private bool isJoinGameRoom = false;
     private bool isConnectInGameServer = false;
@@ -38,7 +40,51 @@ public partial class MatchManager : MonoBehaviour
     public bool isReconnectEnable { get; private set; } = false;
 
     private string inGameRoomToken = string.Empty;  // 게임 룸 토큰 (인게임 접속 토큰)
+    public bool isSandBoxGame { get; private set; } = false;
 
+    public void GetMatchList(Action<bool, string> func)
+    {
+        Backend.Match.GetMatchList(callback =>
+        {
+            if (callback.IsSuccess() == false)
+            {
+                Debug.Log("매칭 카드 불러오기 실패");
+                Dispatcher.Current.BeginInvoke(() =>
+                {
+                    GetMatchList(func);
+                }
+                );
+                return;
+            }
+            foreach (LitJson.JsonData row in callback.Rows())
+            {
+                MatchInfo info = new MatchInfo();
+                info.indate = row["inDate"]["S"].ToString();
+                foreach(MatchType type in Enum.GetValues(typeof(MatchType)))
+                {
+                info.matchType =type;
+                }
+                foreach (MatchModeType type in Enum.GetValues(typeof(MatchModeType)))
+                {
+                    info.matchModeType = type;
+                }
+                Debug.Log("매치 dz료");
+
+                MatchInfos.Add(info);
+            }
+            Debug.Log("매치 카드 생성 완료");
+            func(true, string.Empty); 
+        });
+    }
+    public MatchInfo GetMatchInfo(string indate)
+    {
+        var result = MatchInfos.FirstOrDefault(x => x.indate == indate);
+        if (result.Equals(default(MatchInfo)) == true)
+        {
+            return null;
+        }
+        return result;
+    }
     // Start is called before the first frame update
     public static MatchManager GetInstance()
     {
@@ -63,11 +109,13 @@ public partial class MatchManager : MonoBehaviour
         JoinMatchServer();
           
     }
+    
     private void Start()
     {
-        MatchMakingHandler();
+        
         GameHandle();
         ExceptionHandler();
+        MatchMakingHandler();
     }
     private void ExceptionHandler()
     {
@@ -95,7 +143,7 @@ public partial class MatchManager : MonoBehaviour
         };
         Backend.Match.OnMatchMakingResponse += (args) =>
         {
-
+            Debug.Log("ditm");
             Debug.Log("OnMatchMakingResponse : " + args.ErrInfo + " : " + args.Reason);
             // 매칭 신청 관련 작업에 대한 호출
             ProcessMatchMakingResponse(args);
