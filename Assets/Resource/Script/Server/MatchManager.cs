@@ -15,8 +15,8 @@ public partial class MatchManager : MonoBehaviour
         public ushort port;
         public string roomToken;
     }
-    
-        
+
+
     public class MatchInfo
     {
         public string indate;
@@ -60,9 +60,9 @@ public partial class MatchManager : MonoBehaviour
             {
                 MatchInfo info = new MatchInfo();
                 info.indate = row["inDate"]["S"].ToString();
-                foreach(MatchType type in Enum.GetValues(typeof(MatchType)))
+                foreach (MatchType type in Enum.GetValues(typeof(MatchType)))
                 {
-                info.matchType =type;
+                    info.matchType = type;
                 }
                 foreach (MatchModeType type in Enum.GetValues(typeof(MatchModeType)))
                 {
@@ -73,7 +73,7 @@ public partial class MatchManager : MonoBehaviour
                 MatchInfos.Add(info);
             }
             Debug.Log("매치 카드 생성 완료");
-            func(true, string.Empty); 
+            func(true, string.Empty);
         });
     }
     public MatchInfo GetMatchInfo(string indate)
@@ -88,7 +88,7 @@ public partial class MatchManager : MonoBehaviour
     // Start is called before the first frame update
     public static MatchManager GetInstance()
     {
-        if(!Instance)
+        if (!Instance)
         {
             return null;
         }
@@ -107,12 +107,12 @@ public partial class MatchManager : MonoBehaviour
         roomInfo = null;
         isReconnectEnable = false;
         JoinMatchServer();
-          
+
     }
-    
+
     private void Start()
     {
-        
+
         GameHandle();
         ExceptionHandler();
         MatchMakingHandler();
@@ -139,7 +139,7 @@ public partial class MatchManager : MonoBehaviour
     {
         Backend.Match.OnJoinMatchMakingServer += (args) =>
         {
-            Debug.Log("서버 접속중"+args.ErrInfo);
+            Debug.Log("서버 접속중" + args.ErrInfo);
         };
         Backend.Match.OnMatchMakingResponse += (args) =>
         {
@@ -167,15 +167,7 @@ public partial class MatchManager : MonoBehaviour
             }
         };
     }
-    private void AccessInGameRoom(string roomToken)
-    {
-        Backend.Match.JoinGameRoom(roomToken);
-    }
-    public void LeaveInGameRoom()
-    {
-        isConnectInGameServer = false;
-        Backend.Match.LeaveGameServer();
-    }
+
     public bool IsHost()
     {
         return isHost;
@@ -193,19 +185,8 @@ public partial class MatchManager : MonoBehaviour
         return true;
         //return session
     }
- 
-    private void ProcessMatchInGameSessionList(MatchInGameSessionListEventArgs args)
-    {
-        sessionIdList = new List<SessionId>();
-        gameRecords = new Dictionary<SessionId, MatchUserGameRecord>();
 
-        foreach (var record in args.GameRecords)
-        {
-            sessionIdList.Add(record.m_sessionId);
-            gameRecords.Add(record.m_sessionId, record);
-        }
-        sessionIdList.Sort();
-    }
+
     private void MatcgMakingHandler()
     {
         Backend.Match.OnJoinMatchMakingServer += (args) =>
@@ -304,21 +285,23 @@ public partial class MatchManager : MonoBehaviour
                 {
                     if (args.ErrInfo.Reason.Equals("Reconnect Success"))
                     {
-
+                        //GameManager.GetInstance().ChangeState(GameManager.GameState.Reconnect);
+                        Debug.Log("재접속 성공");
                     }
                     else if (args.ErrInfo.Reason.Equals("Fail to Reconnect"))
                     {
-
+                        Debug.Log("재접속 실패");
+                        JoinMatchServer();
                         isConnectMatchServer = false;
                     }
                 }
                 return;
             }
-            if(isJoinGameRoom)
+            if (isJoinGameRoom)
             {
                 return;
             }
-            if(inGameRoomToken == string.Empty)
+            if (inGameRoomToken == string.Empty)
             {
                 Debug.LogError("룸토큰없");
                 return;
@@ -335,24 +318,46 @@ public partial class MatchManager : MonoBehaviour
         };
         Backend.Match.OnMatchInGameAccess += (args) =>
         {
-            //ProcessMatchInGameAccess(args);
+            Debug.Log("OnMatchInGameAccess : " + args.ErrInfo);
+            ProcessMatchInGameAccess(args);
 
         };
         Backend.Match.OnMatchInGameStart += () =>
         {
+            GameSetUp();
             //
+        };
+        Backend.Match.OnMatchResult += (args) =>
+        {
+            Debug.Log("게임 결과값 업로드 결과 : " + string.Format("{ 0 } : {1}", args.ErrInfo, args.Reason));
+            if (args.ErrInfo == BackEnd.Tcp.ErrorCode.Success)
+            {
+
+            }
+            else if (args.ErrInfo == BackEnd.Tcp.ErrorCode.Match_InGame_Timeout)
+            {
+                Debug.Log("게임 입장 실패 : " + args.ErrInfo);
+                //LobbyUI.GetInstance().MatchCancelCallback();
+            }
+            else
+            {
+                //InGameUiManager.instance.SetGameResult("결과 종합 실패\n호스트와 연결이 끊겼습니다.");
+                Debug.Log("게임 결과 업로드 실패 : " + args.ErrInfo);
+            }
+            sessionIdList = null;
+        };
+        Backend.Match.OnMatchRelay += (args) =>
+        {
         };
         Backend.Match.OnLeaveInGameServer += (args) =>
         {
-            if(args.Reason.Equals("재접속실패"))
+            Debug.Log("OnLeaveInGameServer" + args.ErrInfo + " : " + args.Reason);
+            if (args.Reason.Equals("Fail To Reconnect"))
             {
-                //
+                JoinMatchServer();
             }
             isConnectInGameServer = false;
         };
-        Backend.Match.OnSessionOnline += (args) =>
-        {
-           // var nickName = Backend.Match.GetNickNameBySessionId(arg);
-        };
+      
     }
 }

@@ -48,4 +48,11 @@ namespace Protocol
 
         }
     }
+    public class LoadRoomSceneMessage : Message
+    {
+        public LoadRoomSceneMessage() : base(Type.LoadGameScene)
+        {
+
+        }
+    }
 }
