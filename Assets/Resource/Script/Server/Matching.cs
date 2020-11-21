@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BackEnd;
 using BackEnd.Tcp;
+using UnityEngine.SceneManagement;
 public partial class MatchManager : MonoBehaviour
 {
     public MatchType nowmatchType { get; private set; } = MatchType.None;
@@ -27,6 +28,10 @@ public partial class MatchManager : MonoBehaviour
     }
     public void LeaveMatchServer()
     {
+        Backend.Match.OnMatchMakingRoomLeave += (args) =>
+        {
+
+        };
         isConnectMatchServer = false;
         Backend.Match.LeaveMatchMakingServer();
     }
@@ -35,7 +40,6 @@ public partial class MatchManager : MonoBehaviour
         nowmatchType = matchType;
         nowModeType = matchModeType;
         Debug.Log(string.Format("매칭 타입/모드 : {0}/{1}", nowmatchType, nowModeType));
-
     }
     private void ProcessMatchSuccess(MatchMakingResponseEventArgs args)
     {
@@ -64,7 +68,6 @@ public partial class MatchManager : MonoBehaviour
         nowmatchType = info.matchType;
         nowModeType = info.matchModeType;
         numOfClient = int.Parse(info.HeadCount);
-
     }
     public bool CreateMatchRoom()
     {
@@ -89,7 +92,6 @@ public partial class MatchManager : MonoBehaviour
     }
     public void RequestMatchMaking(int index)
     {
-        Debug.Log("tprtm");
         if(!isConnectMatchServer)
         {
             Debug.Log("서버연결 실패");
@@ -98,7 +100,6 @@ public partial class MatchManager : MonoBehaviour
             return;
         }
         isConnectInGameServer = false;
-        Debug.Log("gdsakngsdlkgnsald");
         Backend.Match.RequestMatchMaking(MatchInfos[index].matchType,MatchInfos[index].matchModeType,MatchInfos[index].indate);
         if(isConnectInGameServer)
         {
@@ -119,7 +120,6 @@ public partial class MatchManager : MonoBehaviour
                 while(localQueue.Count > 0)
                 {
                     var msg = localQueue.Dequeue();
-                    
                 }
             }
         }
@@ -132,6 +132,7 @@ public partial class MatchManager : MonoBehaviour
             case ErrorCode.Success ://매칭성공시
                 debugLog = string.Format("성공", args.Reason);
                 ProcessMatchSuccess(args);
+                SceneManager.LoadScene("GameScene");
                 break;
             case ErrorCode.Match_InProgress://매치 중일때 재신청하면
                 if(args.Reason == string.Empty)
@@ -139,30 +140,24 @@ public partial class MatchManager : MonoBehaviour
                     debugLog = "성공";
                 }
                 break;
-            case ErrorCode.Match_MatchMakingCanceled://매칭 취소했을때
-                debugLog = string.Format("취소", args.Reason);
-
-                break;
-                
+            case ErrorCode.Match_MatchMakingCanceled:
+                    debugLog = string.Format("취소", args.Reason);
+                    break;
         }
     }
     private void ProcessAccessMatchMakingServer(ErrorInfo errInfo)
     {
         if (errInfo != ErrorInfo.Success)
         {
-            // 접속 실패
             isConnectMatchServer = false;
         }
-
         if (!isConnectMatchServer)
         {
             var errorLog = string.Format("서버 접속 실패", errInfo.ToString());
-            // 접속 실패
             Debug.Log(errorLog);
         }
         else
         {
-            //접속 성공
             Debug.Log("서버 접속 성공");
         }
     }

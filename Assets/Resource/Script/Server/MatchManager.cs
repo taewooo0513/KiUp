@@ -120,17 +120,17 @@ public partial class MatchManager : MonoBehaviour
     private void ExceptionHandler()
     {
         // 예외가 발생했을 때 호출
-        Backend.Match.OnException += (e) =>
+        Backend.Match.OnException += (args) =>
         {
-            Debug.Log(e);
+            Debug.Log(args);
         };
     }
     private void OnApplicationQuit()
     {
         if (isConnectMatchServer)
         {
-            //LeaveMatchServer();
-            //Debug.Log("ApplicationQuit - LeaveMatchServer");
+            LeaveMatchServer();
+            Debug.Log("ApplicationQuit - LeaveMatchServer");
 
         }
     }
@@ -139,11 +139,10 @@ public partial class MatchManager : MonoBehaviour
     {
         Backend.Match.OnJoinMatchMakingServer += (args) =>
         {
-            Debug.Log("로그인"+args.ErrInfo);
+            Debug.Log("서버 접속중"+args.ErrInfo);
         };
         Backend.Match.OnMatchMakingResponse += (args) =>
         {
-            Debug.Log("ditm");
             Debug.Log("OnMatchMakingResponse : " + args.ErrInfo + " : " + args.Reason);
             // 매칭 신청 관련 작업에 대한 호출
             ProcessMatchMakingResponse(args);
@@ -229,9 +228,9 @@ public partial class MatchManager : MonoBehaviour
             //{
             //    // 게임 사전 설정을 진행하였으면 바로 리턴
             //    return;
-            //}
+            //}ProcessMatchMakingResponse
 
-            //if (WorldManager.instance == null)
+            //if (WorldManager.instance == null)ProcessMatchMakingResponse
             //{
             //    // 월드 매니저가 존재하지 않으면 바로 리턴
             //    return;
@@ -353,7 +352,7 @@ public partial class MatchManager : MonoBehaviour
         };
         Backend.Match.OnSessionOnline += (args) =>
         {
-            //var nickName = BackEnd.Match.get
+           // var nickName = Backend.Match.GetNickNameBySessionId(arg);
         };
     }
 }

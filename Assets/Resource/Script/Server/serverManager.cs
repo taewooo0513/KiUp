@@ -11,7 +11,7 @@ using Battlehub.Dispatcher;
 
 public class serverManager : MonoBehaviour
 {
-
+    
     private static serverManager instance;   // 인스턴스
     public bool isLogin { get; private set; }   // 로그인 여부
     BackEnd.Tcp.MatchMakingInteractionEventArgs args;
