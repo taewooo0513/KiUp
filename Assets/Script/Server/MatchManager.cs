@@ -158,7 +158,7 @@ public partial class MatchManager : MonoBehaviour
                 || args.ErrInfo.Category.Equals(ErrorCode.NetworkTimeout))
             {
                 // 서버에서 강제로 끊은 경우
-                if (LobbyUI.GetInstance())
+                //if (LobbyUI.GetInstance())
                 {
                     //LobbyUI.GetInstance().MatchRequestCallback(false);
                     //LobbyUI.GetInstance().CloseRoomUIOnly();
