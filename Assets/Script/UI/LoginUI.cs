@@ -126,7 +126,6 @@ public class LoginUI : MonoBehaviour
         {
             Dispatcher.Current.BeginInvoke(() =>
             {
-                Debug.Log("gdasn");
                 if (!result)
                 {
                     //loadingObject.SetActive(false);
@@ -234,6 +233,7 @@ public class LoginUI : MonoBehaviour
         //   loadingObject.SetActive(true);
         serverManager.GetInstance().GuestLogin((bool result, string error) =>
         {
+            Debug.Log("gdasn");
 
             Dispatcher.Current.BeginInvoke(() =>
             {

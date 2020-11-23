@@ -10,6 +10,7 @@ public partial class MatchManager : MonoBehaviour
     public MatchModeType nowModeType { get; private set; } = MatchModeType.None;
     public void JoinMatchServer()
     {
+        Debug.Log(serverManager.GetInstance().myNickName);
         if(isConnectMatchServer)
         {
             return;
@@ -100,7 +101,7 @@ public partial class MatchManager : MonoBehaviour
             return;
         }
         isConnectInGameServer = false;
-        Backend.Match.RequestMatchMaking(MatchInfos[index].matchType,MatchInfos[index].matchModeType,MatchInfos[index].indate);
+        Backend.Match.RequestMatchMaking(MatchType.Random,MatchModeType.OneOnOne,MatchInfos[index].indate);
         if(isConnectInGameServer)
         {
             Backend.Match.LeaveGameServer();
@@ -158,7 +159,7 @@ public partial class MatchManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("서버 접속 성공");
+            CreateMatchRoom();
         }
     }
 

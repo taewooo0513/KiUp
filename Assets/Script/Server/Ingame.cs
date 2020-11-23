@@ -7,9 +7,22 @@ using BackEnd.Tcp;
 
 public partial class MatchManager : MonoBehaviour
 {
+    private bool inSetHost = false;
     private MatchGameResult matchGameResult;
 
     // Start is called before the first frame update
+    public void OnGameReady()
+    {
+        if(inSetHost == false)
+        {
+            inSetHost = SetHostSession();
+        }
+        Debug.Log("호스트 설정 완료");
+        if(IsHost() == true)
+        {
+            Invoke("ReadyToLoadRoom",0.5f);
+        }
+    }
     private void OnGameRecoonect()
     {
         localQueue = null;
@@ -68,6 +81,7 @@ public partial class MatchManager : MonoBehaviour
     private void GameSetUp()
     {
         Debug.Log("게임 시작 메시지 수신. 게임 설정 시작");
+        OnGameReady();
 
         Invoke("ReadyToLoadRoom", 0.5f);
 

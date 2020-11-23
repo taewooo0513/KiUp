@@ -193,8 +193,8 @@ public class serverManager : MonoBehaviour
                 MatchManager.GetInstance().GetMatchList(loginSuccessFunc);
                 loginSuccessFunc(true, string.Empty);
             }
-            SceneManager.LoadScene("Matching");
         });
+            SceneManager.LoadScene("Matching");
     }
     void Update()
     {
@@ -211,7 +211,6 @@ public class serverManager : MonoBehaviour
                 Debug.Log("게스트 로그인 성공");
                 loginSuccessFunc = func;
                 OnPrevBackendAuthorized();
-
                 return;
 
             }

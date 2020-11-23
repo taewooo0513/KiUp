@@ -33,6 +33,8 @@ public partial class MatchManager : MonoBehaviour
     private int numOfClient = 2;                    // 매치에 참가한 유저의 총 수
     private bool isHost = false;
     private bool isJoinGameRoom = false;
+    public SessionId hostSession { get; private set; }  // 호스트 세션
+
     private bool isConnectInGameServer = false;
     public List<SessionId> sessionIdList { get; private set; }  // 매치에 참가중인 유저들의 세션 목록
     public Dictionary<SessionId, MatchUserGameRecord> gameRecords { get; private set; } = null;  // 매치에 참가중인 유저들의 매칭 기록
@@ -140,6 +142,7 @@ public partial class MatchManager : MonoBehaviour
         Backend.Match.OnJoinMatchMakingServer += (args) =>
         {
             Debug.Log("서버 접속중" + args.ErrInfo);
+            ProcessAccessMatchMakingServer(args.ErrInfo);
         };
         Backend.Match.OnMatchMakingResponse += (args) =>
         {
@@ -178,15 +181,45 @@ public partial class MatchManager : MonoBehaviour
     }
     private bool SetHostSession()
     {
+        Debug.Log("호스트 세션 설정 진입");
+        sessionIdList.Sort();
+        isHost = false;
+        foreach (var record in gameRecords)
+        {
+            if (record.Value.m_isSuperGamer == true)
+            {
+                if (record.Value.m_sessionId.Equals(Backend.Match.GetMySessionId()))
+                {
+                    isHost = true;
+                }
+                hostSession = record.Value.m_sessionId;
+                break;
+            }
+            Debug.Log("호스트 여부 : " + isHost);
+            if (isHost)
+            {
+                localQueue = new Queue<KeyMessage>();
+            }
+            else
+            {
+                localQueue = null;
+            }
+        }
         return true;
     }
     public bool IsSessionListNull()
     {
-        return true;
-        //return session
+        return sessionIdList == null || sessionIdList.Count == 0;
+
     }
-
-
+    public bool IsMySessionId(SessionId session)
+    {
+        return Backend.Match.GetMySessionId() == session;
+    }
+    public string GetNickNameBySessionId(SessionId session)
+    {
+        return gameRecords[session].m_nickname;
+    }
     private void MatcgMakingHandler()
     {
         Backend.Match.OnJoinMatchMakingServer += (args) =>
@@ -219,6 +252,7 @@ public partial class MatchManager : MonoBehaviour
 
             //WorldManager.instance.OnRecieve(args);
         };
+       
         Backend.Match.OnLeaveMatchMakingServer += (args) =>
         {
             Debug.Log("OnLeaveMatchMakingServer : " + args.ErrInfo);
@@ -358,6 +392,6 @@ public partial class MatchManager : MonoBehaviour
             }
             isConnectInGameServer = false;
         };
-      
+
     }
 }
