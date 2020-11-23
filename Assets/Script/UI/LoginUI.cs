@@ -200,6 +200,8 @@ public class LoginUI : MonoBehaviour
         {
             errorText.text = "닉네임을 먼저 입력해주세요";
             errorObject.SetActive(true);
+            SceneManager.LoadScene("Matching");
+
             return;
         }
      //  loadingObject.SetActive(true);
@@ -212,6 +214,8 @@ public class LoginUI : MonoBehaviour
                     loadingObject.SetActive(false);
                     errorText.text = "닉네임 생성 오류\n\n" + error;
                     errorObject.SetActive(true);
+                    SceneManager.LoadScene("Matching");
+
                     return;
                 }
                // ChangeLobbyScene();
@@ -233,7 +237,7 @@ public class LoginUI : MonoBehaviour
         //   loadingObject.SetActive(true);
         serverManager.GetInstance().GuestLogin((bool result, string error) =>
         {
-            Debug.Log("gdasn");
+            
 
             Dispatcher.Current.BeginInvoke(() =>
             {

@@ -181,20 +181,28 @@ public class serverManager : MonoBehaviour
             Debug.Log("유저정보\n" + callback);
 
             var info = callback.GetReturnValuetoJSON()["row"];
+            Debug.Log(info["nickname"]);
             if (info["nickname"] == null)
             {
+                Debug.Log("gd");
                 LoginUI.GetInstance().ActiveNickNameObject();
+
                 return;
             }
+
+
             myNickName = info["nickname"].ToString();
             myIndate = info["inDate"].ToString();
+
             if (loginSuccessFunc != null)
             {
                 MatchManager.GetInstance().GetMatchList(loginSuccessFunc);
                 loginSuccessFunc(true, string.Empty);
             }
-        });
+            
             SceneManager.LoadScene("Matching");
+
+        });
     }
     void Update()
     {

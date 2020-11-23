@@ -654,8 +654,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 1441277153}
-        m_TargetAssemblyTypeName: MatchManager, Assembly-CSharp
-        m_MethodName: JoinMatchServer
+        m_TargetAssemblyTypeName: MatchUI, Assembly-CSharp
+        m_MethodName: StartMatch
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -913,7 +913,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1441277150}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b3406cb3d18677429d6e6b5ce60e5ee, type: 3}
+  m_Script: {fileID: 11500000, guid: be7a9953fbf90664a9c990f397d4a246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1703776785
@@ -1023,8 +1023,8 @@ MonoBehaviour:
           m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 1441277153}
-        m_TargetAssemblyTypeName: MatchManager, Assembly-CSharp
-        m_MethodName: LeaveMatchServer
+        m_TargetAssemblyTypeName: MatchUI, Assembly-CSharp
+        m_MethodName: StopMatch
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
