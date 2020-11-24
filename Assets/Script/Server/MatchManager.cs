@@ -70,7 +70,6 @@ public partial class MatchManager : MonoBehaviour
                 {
                     info.matchModeType = type;
                 }
-                Debug.Log("매치 dz료");
 
                 MatchInfos.Add(info);
             }
@@ -115,9 +114,9 @@ public partial class MatchManager : MonoBehaviour
     private void Start()
     {
 
-        GameHandle();
         ExceptionHandler();
         MatchMakingHandler();
+        GameHandle();
     }
     private void ExceptionHandler()
     {

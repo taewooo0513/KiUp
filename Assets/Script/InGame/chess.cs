@@ -28,6 +28,10 @@ public class chess : MonoBehaviour
     [Header("선택 창 UI")]
     public Button moveButton;
     public Button skillButton;
+    [Header("카메라")]
+    public GameObject _1pCamera;
+    public GameObject _2pCamera;
+
 
     [HideInInspector] static public bool openUI;
 
@@ -38,10 +42,20 @@ public class chess : MonoBehaviour
     {
         AddChessBoard();
         AddChessPiece();
+
+        if(MatchManager.GetInstance().IsHost() == true)
+        {
+            _1pCamera.SetActive(true);
+        }
+        else
+        {
+            _2pCamera.SetActive(false);
+        }
     }
 
     void Update()
     {
+        Debug.Log(MatchManager.GetInstance().IsHost());
         //마우스피킹
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -51,8 +65,8 @@ public class chess : MonoBehaviour
             {
                 if (hit.transform.gameObject.CompareTag("Tile"))//마우스 피킹을하여 그 타일의 자식오브젝트를 확인하여 움직일수있음 
                 {
-                    if (openUI) ChoiceUI(hit);
-                    else MoveChess(hit);
+                     
+                    MoveChess(hit);
                 }
             }
         }
@@ -121,33 +135,41 @@ public class chess : MonoBehaviour
 
     void MoveChess(RaycastHit hit)
     {
+
         if (hit.transform.childCount == 0)
         {
-            switch (Move.tag)
-            {//Move 의 태그를 검사하여 그 태그를 가진 말들마다 제한둠
-                case "Pawn":
-                    PawnMove(Move, hit.transform.gameObject);
-                    break;
-                case "King":
-                    KingMove(Move, hit.transform.gameObject);
-                    break;
-                case "Queen":
-                    QueenMove(Move, hit.transform.gameObject);
-                    break;
-                case "Knight":
-                    KnightMove(Move, hit.transform.gameObject);
-                    break;
-                case "Rook":
-                    RookMove(Move, hit.transform.gameObject);
-                    break;
-                case "Bishop":
-                    BishopMove(Move, hit.transform.gameObject);
-                    break;
-            }
+            if (Move != null)
+                switch (Move.tag)
+                {//Move 의 태그를 검사하여 그 태그를 가진 말들마다 제한둠
+                    case "Pawn":
+                        PawnMove(Move, hit.transform.gameObject);
+                        break;
+                    case "King":
+                        KingMove(Move, hit.transform.gameObject);
+                        break;
+                    case "Queen":
+                        QueenMove(Move, hit.transform.gameObject);
+                        break;
+                    case "Knight":
+                        KnightMove(Move, hit.transform.gameObject);
+                        break;
+                    case "Rook":
+                        RookMove(Move, hit.transform.gameObject);
+                        break;
+                    case "Bishop":
+                        BishopMove(Move, hit.transform.gameObject);
+                        break;
+                }
         }
         else
         {
-            if (hit.transform.GetChild(0).gameObject.layer != Move.layer)
+            if (Move == null)
+            {
+                Move = hit.transform.GetChild(0).gameObject;
+                return;
+            }
+            else
+        if (hit.transform.GetChild(0).gameObject.layer != Move.layer)
             {//이건 부모오브젝트에 자식수가 1이상이면 실행됨 레이어를 검사하여 흰색 검은색 검사함
                 switch (Move.tag)
                 {

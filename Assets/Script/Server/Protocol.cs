@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 namespace Protocol
 {
     // 이벤트 타입
@@ -52,7 +52,7 @@ namespace Protocol
     {
         public LoadRoomSceneMessage() : base(Type.LoadGameScene)
         {
-
+            SceneManager.LoadScene("GameScene");
         }
     }
 }
