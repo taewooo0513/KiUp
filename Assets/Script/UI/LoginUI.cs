@@ -82,7 +82,6 @@ public class LoginUI : MonoBehaviour
         {
             Dispatcher.Current.BeginInvoke(() =>
             {
-                Debug.Log("gdasn");
                 if (result)
                 {
                  //   ChangeLobbyScene();

@@ -126,6 +126,16 @@ public partial class MatchManager : MonoBehaviour
             Debug.Log(args);
         };
     }
+    public void AddMsgToLocalQueue(KeyMessage message)
+    {
+        // 로컬 큐에 메시지 추가
+        if (isHost == false || localQueue == null)
+        {
+            return;
+        }
+
+        localQueue.Enqueue(message);
+    }
     private void OnApplicationQuit()
     {
         if (isConnectMatchServer)

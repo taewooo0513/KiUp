@@ -1,10 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Protocol;
+using BackEnd.Tcp;
+using BackEnd;
+
 
 public class chess : MonoBehaviour
 {
+    private SessionId index = 0;
+    private string nickName = string.Empty;
+    private bool isme = false;
     [Header("체스판")]
     public GameObject WhiteBlock;
     public GameObject BlackBlock;
@@ -49,10 +55,10 @@ public class chess : MonoBehaviour
         }
         else
         {
-            _2pCamera.SetActive(false);
+            _2pCamera.SetActive(true);
         }
     }
-
+   
     void Update()
     {
         Debug.Log(MatchManager.GetInstance().IsHost());
